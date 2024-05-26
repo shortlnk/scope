@@ -66,7 +66,7 @@ export class Scope {
       });
   }
 
-  test(scope: ScopeLiteral): boolean {
+  public test(scope: ScopeLiteral): boolean {
     const test = scope.split(':');
     return this.scheme.every((section, index) => {
       if (section === '*' || section.includes('*')) {
@@ -90,6 +90,60 @@ export class Scope {
 
       return section === test[index];
     });
+  }
+
+  public exportLiterals(): string[] {
+    const tree: Record<number, string[]> = {};
+
+    this.scheme.forEach((section, i) => {
+      tree[i] = [];
+      if (typeof section === 'string') {
+        tree[i].push(section);
+        return;
+      }
+
+      if (Array.isArray(section)) {
+        if (Array.isArray(section[1])) {
+          if (Array.isArray(section[0])) {
+            for (let j = 0; j < section[0].length; j++) {
+              for (let k = 0; k < section[1].length; k++) {
+                tree[i].push(`${section[0][j]}.${section[1][k]}`);
+              }
+            }
+
+            return;
+          } else {
+            for (let j = 0; j < section[1].length; j++) {
+              tree[i].push(`${section[0]}.${section[1][j]}`);
+            }
+            return;
+          }
+        } else {
+          tree[i].push(...section as string[]);
+        }
+      }
+    });
+
+    const literals: string[] = [];
+
+    const deepRead = (tree: Record<number, string[]>, index = 0, word = '') => {
+      console.log(tree, index, word);
+      if (index === Object.keys(tree).length - 1) {
+        tree[index].forEach((literal) => {
+          literals.push(word === '' ? literal : `${word}:${literal}`);
+        });
+        return;
+      }
+
+      tree[index].forEach((literal) => {
+        deepRead(tree, index + 1, word === '' ? literal : `${word}:${literal}`);
+      });
+    }
+
+    deepRead(tree, 0, '');
+  
+
+    return literals;
   }
 }
 

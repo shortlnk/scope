@@ -20,6 +20,8 @@ scope.test('service:users:read'); // true
 scope.test('service:users:write'); // true
 
 scope.test('service:bots:read'); // false
+
+scope..exportLiterals(); // ['service:users:*']
 ```
 
 ### Multiple choices example
@@ -37,6 +39,8 @@ scope.test('service:users:read'); // true
 scope.test('service:users:write'); // true
 
 scope.test('service:users:delete'); // false
+
+scope.exportLiterals(); // ['service:users:read', 'service:users:write']
 ```
 
 ### Sub scope example
@@ -54,6 +58,8 @@ scope.test('service.host:users:read:1'); // true
 scope.test('service.host:users:write:2'); // true
 
 scope.test('service.host:users:delete:3'); // false
+
+scope.exportLiterals(); // ['service.host:users:read:*', 'service.host:users:write:*']
 ```
 
 ### Complex example
@@ -71,6 +77,30 @@ scope.test('service.host:profile.1:dm.read:friend:exchange.read'); // true
 scope.test('service.host:member.all:dm.write:friend:transfer.write'); // true
 
 scope.test('service.host:member.3:write:exchange.read'); // false
+
+scope.exportLiterals();
+/**
+ * [
+ *  'service.host:profile.*:*.read:*:exchange.read',
+ *  'service.host:profile.*:*.read:*:exchange.write',
+ *  'service.host:profile.*:*.read:*:transfer.read',
+ *  'service.host:profile.*:*.read:*:transfer.write',
+ * 
+ *  'service.host:profile.*:*.write:*:exchange.read',
+ *  'service.host:profile.*:*.write:*:exchange.write',
+ *  'service.host:profile.*:*.write:*:transfer.read',
+ *  'service.host:profile.*:*.write:*:transfer.write',
+ * 
+ *  'service.host:member.*:*.read:*:exchange.read',
+ *  'service.host:member.*:*.read:*:exchange.write',
+ *  'service.host:member.*:*.read:*:transfer.read',
+ *  'service.host:member.*:*.read:*:transfer.write',
+ *  'service.host:member.*:*.write:*:exchange.read',
+ *  'service.host:member.*:*.write:*:exchange.write',
+ *  'service.host:member.*:*.write:*:transfer.read',
+ *  'service.host:member.*:*.write:*:transfer.write',
+ * ]
+ */
 ```
 
 ## Reference
@@ -106,6 +136,13 @@ Test if the scope is valid.
 #### Returns
 
 * `boolean` - `true` if the scope is valid, `false` otherwise.
+
+### `scope.exportLiterals(): ScopeLiteral[]`
+Export all possible literals of the scope.
+
+#### Returns
+
+* `ScopeLiteral[]` - All possible literals of the scope.
 
 # Authors
 
