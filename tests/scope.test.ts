@@ -23,6 +23,9 @@ describe('🔐 Testing scope', () => {
 
     const scope7 = new Scope('{service,host}.users:method');
     expect(scope7.scheme).toEqual([[['service', 'host'], ['users']], 'method']);
+
+    const scope8 = new Scope('service.host:method');
+    expect(scope8.scheme).toEqual([['service', ['host']], 'method']);
   });
 
   test('🏮 Testing verbal scope', () => {

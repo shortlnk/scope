@@ -7,6 +7,8 @@ export type ScopeVerbal = `${string | '*' | ':' | MultiPoolVerbal}` | `${string 
 
 export type Scheme = Scopewildcard | ScopeVerbal;
 
+export type ScopeLiteral = `${string | ':' | ScopeVerbal}`;
+
 export class Scope {
   public scheme: Scopewildcard;
   constructor(scheme: Scheme) {
@@ -64,7 +66,7 @@ export class Scope {
       });
   }
 
-  test(scope: string): boolean {
+  test(scope: ScopeLiteral): boolean {
     const test = scope.split(':');
     return this.scheme.every((section, index) => {
       if (section === '*' || section.includes('*')) {
