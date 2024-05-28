@@ -127,7 +127,6 @@ export class Scope {
     const literals: string[] = [];
 
     const deepRead = (tree: Record<number, string[]>, index = 0, word = '') => {
-      console.log(tree, index, word);
       if (index === Object.keys(tree).length - 1) {
         tree[index].forEach((literal) => {
           literals.push(word === '' ? literal : `${word}:${literal}`);
