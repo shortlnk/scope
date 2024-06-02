@@ -22,8 +22,8 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
           cache: 'pnpm'
-      - run: npm install
-      - run: npm test
+      - run: pnpm install
+      - run: pnpm test
 
   publish-gpr:
     needs: build
@@ -42,7 +42,7 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
           cache: 'pnpm'
-      - run: npm install
-      - run: npm publish
+      - run: pnpm install
+      - run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
